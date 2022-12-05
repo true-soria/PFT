@@ -4,6 +4,7 @@ from collections import namedtuple
 from typing import Self
 
 Column = namedtuple('Column', ['start', 'end'])
+spacing_char = ' '
 
 class Cell(object):
     def __new__(cls: type[Self], entry_json) -> Self:
@@ -12,11 +13,13 @@ class Cell(object):
             entry_json['type'], entry_json['filename']
             col = entry_json['col']
             if isinstance(col, list):
-                assert len(col) == 2, f"Expected exactly 2 numbers, got {len(col)}."
-                assert isinstance(col[0], int), f"\'{col[0]}\' is not a number!"
-                assert isinstance(col[1], int), f"\'{col[1]}\' is not a number!"
+                assert len(col) == 2, f'Expected exactly 2 numbers, got {len(col)}.'
+                assert isinstance(col[0], int), f'\'{col[0]}\' is not a number!'
+                assert col[0] > 0, f'column start can not be less than 1!'
+                assert isinstance(col[1], int), f'\'{col[1]}\' is not a number!'
+                assert col[0] < col[1], f'column end must be greater than column start'
             else:
-                assert isinstance(col, int), f"{col} is not a number!"
+                assert isinstance(col, int), f'{col} is not a number!'
             return super(Cell, cls).__new__(cls)
         except KeyError as e:
             print('The following attribute was missing from the json entry: %s' % str(e))
@@ -60,8 +63,27 @@ def is_line_safe(cell_list):
     return True
 
 
-def print_line():
-    pass
+def form_line(cells):
+    ordered_cells = sorted(cells, key=lambda cell: cell.col.start)
+    # first_char_index = ordered_cells[0].col.end
+    # last_char_index = ordered_cells[-1].col.end
+    previous_stop = 0
+    
+    line = ''
+    for cell in cells:
+        spacing_distance = cell.col.start - previous_stop - 1
+        line += spacing_char * spacing_distance
+        previous_stop = cell.col.end
+        # TODO Implement logical data placement
+        cell_length = cell.col.end - cell.col.start + 1
+        line += '0' * cell_length
+
+    return line
+
+
+    
+
+
 
 if __name__ == '__main__':
 
@@ -76,8 +98,8 @@ if __name__ == '__main__':
             if cell != None: cells.append(cell)
 
     if is_line_safe(cells):
+        print(form_line(cells))
+    else:
         for cell in cells:
             print(cell)
             print()
-    else:
-        print("Oh no!")
