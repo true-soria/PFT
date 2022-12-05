@@ -1,5 +1,4 @@
 {
-    "Grocery Item": {
-        "name": "apples"
-    }
+    "Grocery Item": "apples",
+    "Price": 3.99
 }

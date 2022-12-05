@@ -65,12 +65,10 @@ def is_line_safe(cell_list):
 
 def form_line(cells):
     ordered_cells = sorted(cells, key=lambda cell: cell.col.start)
-    # first_char_index = ordered_cells[0].col.end
-    # last_char_index = ordered_cells[-1].col.end
     previous_stop = 0
     
     line = ''
-    for cell in cells:
+    for cell in ordered_cells:
         spacing_distance = cell.col.start - previous_stop - 1
         line += spacing_char * spacing_distance
         previous_stop = cell.col.end
@@ -81,20 +79,15 @@ def form_line(cells):
     return line
 
 
-    
-
-
-
 if __name__ == '__main__':
-
     cells = []
-    with open('resources/Grocery_List_Description.json', 'r') as f:
+    with open('resources/Grocery_List_Description_2.json', 'r') as f:
         try: data = json.load(f)
         except json.decoder.JSONDecodeError as e:
             print('While reading a JSON, an error was struck: %s' % str(e))
             sys.exit(1)
-        for key in data.keys():
-            cell = Cell(data[key])
+        for entry in data:
+            cell = Cell(entry)
             if cell != None: cells.append(cell)
 
     if is_line_safe(cells):

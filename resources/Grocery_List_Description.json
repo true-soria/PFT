@@ -1,18 +1,18 @@
-{
-    "1": {
+[
+    {
+        "name": "Price",
+        "desc": "The price of the grocery item",
+        "col":[12,15],
+        "row": 1,
+        "type": "float",
+        "filename": "Grocery_List"
+    },
+    {
         "name": "Grocery Item",
         "desc": "This is the name of the item to be purchased at the grocery store.",
         "col":[2,9],
         "row": 1,
         "type": "string",
         "filename": "Grocery_List"
-    } ,
-    "2": {
-        "name": "Price",
-        "desc": "The price of the grocery item",
-        "col":[11,15],
-        "row": 1,
-        "type": "int",
-        "filename": "Grocery_List"
     }
-}
+]
